@@ -12,6 +12,46 @@
 //File loaded texture
 LTexture gLoadedTexture;
 
+struct ArchivoImagen
+{
+    std::string nombreArchivo;
+    std::string nombreEmocion;
+} const archivosImagenes[] =
+{
+    { "01.png", "Contento" },
+    { "02.png", "Triste" },
+    { "03.png", "Sorprendido" },
+    { "04.png", "Contento" },
+    { "05.png", "Asustado" },
+    { "06.png", "Enfadado" },
+    { "07.png", "Contento" },
+    { "08.png", "Asustado" },
+    { "09.png", "Enfadado" },
+    { "10.png", "Triste" },
+    { "11.png", "Triste" },
+    { "12.png", "Contento" },
+    { "13.png", "Contento" },
+    { "14.png", "Aburrido" },
+    { "15.png", "Enfadado" },
+    { "16.png", "Contento" },
+    { "17.png", "Aburrido" },
+    { "18.png", "Sorprendido" },
+    { "19.png", "Aburrido" },
+    { "20.png", "Sorprendido"},
+    { "21.png", "Aburrido" },
+    { "22.png", "Enojado" },
+    { "23.png", "Contento" },
+    { "24.png", "Contento" },
+    { "25.png", "Asustado" },
+    { "26.png", "Aburrido" },
+    { "27.png", "Contento" },
+    { "28.png", "Triste" },
+    { "29.png", "Asustado" },
+    { "30.png", "Sorprendido"}
+};
+
+const int nroArchivoImagenes = sizeof(archivosImagenes)/sizeof(ArchivoImagen);
+
 /*
 Pre Condition:
  -A valid OpenGL context

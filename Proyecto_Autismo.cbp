@@ -46,6 +46,7 @@
 		</Linker>
 		<Unit filename="LTexture.h" />
 		<Unit filename="LoadImage.h" />
+		<Unit filename="Utils.h" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<code_completion />

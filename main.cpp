@@ -1,92 +1,33 @@
 #include <cstdio>
-#include <cmath>
 #include "LoadImage.h"
+#include "Utils.h"
 
 const int SCREEN_WIDTH = 950;
 const int SCREEN_HEIGHT = 650;
 
-struct FloatColorRGB //Need #include "cmath" library
-{
-    int setRED;
-    int setGREEN;
-    int setBLUE;
-    float getRED()
-    {
-        return roundf(((float)setRED / 255) * 100) / 100;
-    };
-    float getGREEN()
-    {
-        return roundf(((float)setGREEN / 255) * 100) / 100;
-    };
-    float getBLUE()
-    {
-        return roundf(((float)setBLUE / 255) * 100) / 100;
-    };
-};
+Position posicionCamara = {3,1.5f, 2};
+Position posicionFlechaIzquierda[3] = { { -3.5f, 3, 0 }, { posicionFlechaIzquierda[0].X+0.5f, posicionFlechaIzquierda[0].Y+0.5f, 0 }, { posicionFlechaIzquierda[0].X+0.5f, posicionFlechaIzquierda[0].Y-0.5f, 0 } };
+Position posicionFlechaDerecha[3] = { { -posicionFlechaIzquierda[0].X, posicionFlechaIzquierda[0].Y, posicionFlechaIzquierda[0].Z }, { -posicionFlechaIzquierda[1].X, posicionFlechaIzquierda[1].Y, posicionFlechaIzquierda[1].Z },  { -posicionFlechaIzquierda[2].X, posicionFlechaIzquierda[2].Y, posicionFlechaIzquierda[2].Z } };
 
-struct Posicion
-{
-    float X;
-    float Y;
-    float Z;
-} posicionCamara = {3,1.5f, 2};
-
-struct ArchivoImagen
-{
-    std::string nombreArchivo;
-    std::string nombreEmocion;
-} const archivosImagenes[] =
-{
-    { "01.png", "Contento" },
-    { "02.png", "Triste" },
-    { "03.png", "Sorprendido" },
-    { "04.png", "Contento" },
-    { "05.png", "Asustado" },
-    { "06.png", "Enfadado" },
-    { "07.png", "Contento" },
-    { "08.png", "Asustado" },
-    { "09.png", "Enfadado" },
-    { "10.png", "Triste" },
-    { "11.png", "Triste" },
-    { "12.png", "Contento" },
-    { "13.png", "Contento" },
-    { "14.png", "Aburrido" },
-    { "15.png", "Enfadado" },
-    { "16.png", "Contento" },
-    { "17.png", "Aburrido" },
-    { "18.png", "Sorprendido" },
-    { "19.png", "Aburrido" },
-    { "20.png", "Sorprendido"},
-    { "21.png", "Aburrido" },
-    { "22.png", "Enojado" },
-    { "23.png", "Contento" },
-    { "24.png", "Contento" },
-    { "25.png", "Asustado" },
-    { "26.png", "Aburrido" },
-    { "27.png", "Contento" },
-    { "28.png", "Triste" },
-    { "29.png", "Asustado" },
-    { "30.png", "Sorprendido"}
-};
-
-const int nroArchivoImagenes = sizeof(archivosImagenes)/sizeof(ArchivoImagen);
 int idArchivoImagenActual = 0;
 
 void inicializar(void)
 {
-    glClearColor(0, 0, 0, 1);
+    FloatColorRGB colorClear = { 20, 20, 20 };
+    glClearColor(colorClear.getRED(), colorClear.getGREEN(), colorClear.getBLUE(), 1);
     glEnable(GL_DEPTH_TEST);
 }
 
 void redimensionar(int w, int h)
 {
+    glutReshapeWindow( SCREEN_WIDTH, SCREEN_HEIGHT);
     glViewport(0, 0, (GLsizei)w, (GLsizei)h);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     gluPerspective(45, (float)w / (float)h, 1, 500);
 }
 
-void graficar2D()
+void graficarImagen2D(void)
 {
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
@@ -107,11 +48,63 @@ void graficar2D()
     glPopMatrix();
 }
 
-void graficar3D()
+void graficarFlechaIzquierda2D(void)
+{
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+    glOrtho(-5, 5, -5, 5, 1, -1 );
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glLoadIdentity();
+    //Inicio de dibujo de figura 2D
+    glBegin(GL_TRIANGLES);
+    glVertex3f(posicionFlechaIzquierda[0].X, posicionFlechaIzquierda[0].Y, posicionFlechaIzquierda[0].Z);
+    glVertex3f(posicionFlechaIzquierda[1].X, posicionFlechaIzquierda[1].Y, posicionFlechaIzquierda[1].Z);
+    glVertex3f(posicionFlechaIzquierda[2].X, posicionFlechaIzquierda[2].Y, posicionFlechaIzquierda[2].Z);
+    glEnd();
+    //Fin de dibujo de figura 2D
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+    glMatrixMode(GL_MODELVIEW);
+    glPopMatrix();
+}
+
+void graficarFlechaDerecha2D(void)
+{
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+    glOrtho(-5, 5, -5, 5, 1, -1 );
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glLoadIdentity();
+    //Inicio de dibujo de figura 2D
+    glBegin(GL_TRIANGLES);
+    glVertex3f(posicionFlechaDerecha[0].X, posicionFlechaDerecha[0].Y, posicionFlechaDerecha[0].Z);
+    glVertex3f(posicionFlechaDerecha[1].X, posicionFlechaDerecha[1].Y, posicionFlechaDerecha[1].Z);
+    glVertex3f(posicionFlechaDerecha[2].X, posicionFlechaDerecha[2].Y, posicionFlechaDerecha[2].Z);
+    glEnd();
+    //Fin de dibujo de figura 2D
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+    glMatrixMode(GL_MODELVIEW);
+    glPopMatrix();
+}
+
+void graficarFigura3D1()
 {
     glPushMatrix();
-    glTranslatef(0,0,0);
-    glutWireCube(2);
+    glTranslatef(-10,-4,0);
+    glutWireCube(1);
+    glPopMatrix();
+}
+
+void graficarFigura3D2()
+{
+    glPushMatrix();
+    glTranslatef(-6,-4,0);
+    glutWireCube(1);
     glPopMatrix();
 }
 
@@ -122,26 +115,54 @@ void graficar()
     glLoadIdentity();
     gluLookAt(posicionCamara.X, posicionCamara.Y, posicionCamara.Z, 0, 0, 0, 0, 1, 0);
 
-    graficar3D();
-    graficar2D();
+    graficarFigura3D1();
+    graficarFigura3D2();
+    graficarImagen2D();
+    graficarFlechaIzquierda2D();
+    graficarFlechaDerecha2D();
 
     glutSwapBuffers();
 }
 
+void manejadorMouse(int button, int state, int x, int y)
+{
+    float XMouse = (x - SCREEN_WIDTH/2) * 3.0 / SCREEN_WIDTH;
+    float YMouse = (SCREEN_HEIGHT/2 - y) * 3.0 / SCREEN_HEIGHT;
+    if(button==GLUT_LEFT_BUTTON && state==GLUT_DOWN)
+    {
+        //Clic en la flecha izquierda
+        if(XMouse>=-1.05f && XMouse<=-0.9f && YMouse<=1.05f && YMouse>=0.75f)
+        {
+            if(idArchivoImagenActual==0)
+            {
+                idArchivoImagenActual = nroArchivoImagenes-1;
+            }
+            else
+            {
+                idArchivoImagenActual--;
+            }
+        }
+        //Clic en la flecha derecha
+        if(XMouse<=1.05f && XMouse>=0.9f && YMouse<=1.05f && YMouse>=0.75f)
+        {
+            if(idArchivoImagenActual<nroArchivoImagenes-1)
+            {
+                idArchivoImagenActual++;
+            }
+            else
+            {
+                idArchivoImagenActual = 0;
+            }
+        }
+    }
+}
 
 void manejarTeclado(unsigned char key, int x, int y)
 {
     switch (key)
     {
     case 'c':
-        if(idArchivoImagenActual<nroArchivoImagenes-1)
-        {
-            idArchivoImagenActual++;
-        }
-        else
-        {
-            idArchivoImagenActual = 0;
-        }
+
         break;
     }
     glutPostRedisplay();
@@ -167,6 +188,8 @@ int main(int argc, char **argv)
     glutDisplayFunc(graficar);
     glutReshapeFunc(redimensionar);
     glutKeyboardFunc(manejarTeclado);
+    glutMouseFunc(manejadorMouse);
     glutMainLoop();
+
     return 0;
 }
