@@ -133,11 +133,7 @@ void manejadorMouse(int button, int state, int x, int y)
         //Clic en la flecha izquierda
         if(XMouse>=-1.05f && XMouse<=-0.9f && YMouse<=1.05f && YMouse>=0.75f)
         {
-            if(idArchivoImagenActual==0)
-            {
-                idArchivoImagenActual = nroArchivoImagenes-1;
-            }
-            else
+            if(idArchivoImagenActual>0)
             {
                 idArchivoImagenActual--;
             }
@@ -148,10 +144,6 @@ void manejadorMouse(int button, int state, int x, int y)
             if(idArchivoImagenActual<nroArchivoImagenes-1)
             {
                 idArchivoImagenActual++;
-            }
-            else
-            {
-                idArchivoImagenActual = 0;
             }
         }
     }
@@ -171,6 +163,9 @@ void manejarTeclado(unsigned char key, int x, int y)
 int main(int argc, char **argv)
 {
     glutInit(&argc, argv);
+
+    glutInitContextVersion( 2, 1 );
+
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     glutInitWindowSize(SCREEN_WIDTH, SCREEN_HEIGHT);
     glutInitWindowPosition(100, 10);

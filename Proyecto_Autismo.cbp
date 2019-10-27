@@ -47,6 +47,36 @@
 		<Unit filename="LTexture.h" />
 		<Unit filename="LoadImage.h" />
 		<Unit filename="Utils.h" />
+		<Unit filename="imagenes/emociones/01.png" />
+		<Unit filename="imagenes/emociones/02.png" />
+		<Unit filename="imagenes/emociones/03.png" />
+		<Unit filename="imagenes/emociones/04.png" />
+		<Unit filename="imagenes/emociones/05.png" />
+		<Unit filename="imagenes/emociones/06.png" />
+		<Unit filename="imagenes/emociones/07.png" />
+		<Unit filename="imagenes/emociones/08.png" />
+		<Unit filename="imagenes/emociones/09.png" />
+		<Unit filename="imagenes/emociones/10.png" />
+		<Unit filename="imagenes/emociones/11.png" />
+		<Unit filename="imagenes/emociones/12.png" />
+		<Unit filename="imagenes/emociones/13.png" />
+		<Unit filename="imagenes/emociones/14.png" />
+		<Unit filename="imagenes/emociones/15.png" />
+		<Unit filename="imagenes/emociones/16.png" />
+		<Unit filename="imagenes/emociones/17.png" />
+		<Unit filename="imagenes/emociones/18.png" />
+		<Unit filename="imagenes/emociones/19.png" />
+		<Unit filename="imagenes/emociones/20.png" />
+		<Unit filename="imagenes/emociones/21.png" />
+		<Unit filename="imagenes/emociones/22.png" />
+		<Unit filename="imagenes/emociones/23.png" />
+		<Unit filename="imagenes/emociones/24.png" />
+		<Unit filename="imagenes/emociones/25.png" />
+		<Unit filename="imagenes/emociones/26.png" />
+		<Unit filename="imagenes/emociones/27.png" />
+		<Unit filename="imagenes/emociones/28.png" />
+		<Unit filename="imagenes/emociones/29.png" />
+		<Unit filename="imagenes/emociones/30.png" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<code_completion />
