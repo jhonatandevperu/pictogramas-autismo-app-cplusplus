@@ -7,6 +7,7 @@
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Debug">
+				<Option platforms="Windows;" />
 				<Option output="bin/Debug/Proyecto_Autismo" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
@@ -46,7 +47,11 @@
 		</Linker>
 		<Unit filename="LTexture.h" />
 		<Unit filename="LoadImage.h" />
+		<Unit filename="Texture.cpp" />
+		<Unit filename="Texture.h" />
 		<Unit filename="Utils.h" />
+		<Unit filename="glm.cpp" />
+		<Unit filename="glm.h" />
 		<Unit filename="imagenes/emociones/01.png" />
 		<Unit filename="imagenes/emociones/02.png" />
 		<Unit filename="imagenes/emociones/03.png" />
@@ -78,6 +83,8 @@
 		<Unit filename="imagenes/emociones/29.png" />
 		<Unit filename="imagenes/emociones/30.png" />
 		<Unit filename="main.cpp" />
+		<Unit filename="stdafx.cpp" />
+		<Unit filename="stdafx.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />

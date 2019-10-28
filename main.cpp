@@ -1,6 +1,11 @@
 #include <cstdio>
-#include "LoadImage.h"
-#include "Utils.h"
+#include <cstdlib>
+#include <windows.h>
+#include "LoadImage.h" //DeviL library
+#include "Utils.h" //User Custom Data
+#include "stdafx.h"
+#include "glm.h"
+#include "Texture.h"
 
 const int SCREEN_WIDTH = 950;
 const int SCREEN_HEIGHT = 650;
@@ -10,12 +15,70 @@ Position posicionFlechaIzquierda[3] = { { -3.5f, 3, 0 }, { posicionFlechaIzquier
 Position posicionFlechaDerecha[3] = { { -posicionFlechaIzquierda[0].X, posicionFlechaIzquierda[0].Y, posicionFlechaIzquierda[0].Z }, { -posicionFlechaIzquierda[1].X, posicionFlechaIzquierda[1].Y, posicionFlechaIzquierda[1].Z },  { -posicionFlechaIzquierda[2].X, posicionFlechaIzquierda[2].Y, posicionFlechaIzquierda[2].Z } };
 
 int idArchivoImagenActual = 0;
+int idWindow, idMenu, idSubMenu, opcion = 0;
+
+GLMmodel* punteroM1 = NULL; //Asombrado
+GLMmodel* punteroM2 = NULL; //Enojado
+GLMmodel* punteroM3 = NULL; //Sorprendido
+
+Texture	treeTextureAr[5];
+
+bool LoadTreeTextures()
+{
+    int i;
+    if (LoadTGA(&treeTextureAr[0], "modelos/textura.tga")) //&& LoadTGA(&treeTextureAr[1], "modelos/textura.tga"))
+    {
+        for (i = 0; i<1; i++)
+        {
+            glGenTextures(1, &treeTextureAr[i].texID);
+            glBindTexture(GL_TEXTURE_2D, treeTextureAr[i].texID);
+            glTexImage2D(GL_TEXTURE_2D, 0, treeTextureAr[i].bpp / 8, treeTextureAr[i].width, treeTextureAr[i].height, 0, treeTextureAr[i].type, GL_UNSIGNED_BYTE, treeTextureAr[i].imageData);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            glEnable(GL_TEXTURE_2D);
+            if (treeTextureAr[i].imageData)
+            {
+                free(treeTextureAr[i].imageData);
+            }
+        }
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+
+void menu(int num)
+{
+    if (num == 0)
+    {
+        glutDestroyWindow(idWindow);
+        exit(0);
+    }
+    else
+    {
+        opcion = num;
+    }
+    glutPostRedisplay();
+}
+
+void crearMenu(void)
+{
+    idMenu = glutCreateMenu(menu);
+    glutAddMenuEntry("Reiniciar", 1);
+    glutAddMenuEntry("Salir", 0);
+    glutAttachMenu(GLUT_RIGHT_BUTTON);
+}
 
 void inicializar(void)
 {
     FloatColorRGB colorClear = { 20, 20, 20 };
     glClearColor(colorClear.getRED(), colorClear.getGREEN(), colorClear.getBLUE(), 1);
+    LoadTreeTextures();
     glEnable(GL_DEPTH_TEST);
+    glShadeModel(GL_SMOOTH);
 }
 
 void redimensionar(int w, int h)
@@ -92,20 +155,34 @@ void graficarFlechaDerecha2D(void)
     glPopMatrix();
 }
 
-void graficarFigura3D1()
+void graficarAsombrado()
 {
-    glPushMatrix();
-    glTranslatef(-10,-4,0);
-    glutWireCube(1);
-    glPopMatrix();
+    glRotatef(-16, 0, 0, 1);
+    glRotatef(70, 0, 1, 0);
+    glRotatef(-30, 1, 0, 0);
+    glScalef(0.15,0.15,0.15);
+    glBindTexture(GL_TEXTURE_2D, treeTextureAr[0].texID);
+    glmDraw(punteroM1, GLM_SMOOTH | GLM_TEXTURE);
 }
 
-void graficarFigura3D2()
+void graficarEnojado()
 {
-    glPushMatrix();
-    glTranslatef(-6,-4,0);
-    glutWireCube(1);
-    glPopMatrix();
+    glRotatef(-16, 0, 0, 1);
+    glRotatef(70, 0, 1, 0);
+    glRotatef(-30, 1, 0, 0);
+    glScalef(0.15,0.15,0.15);
+    glBindTexture(GL_TEXTURE_2D, treeTextureAr[0].texID);
+    glmDraw(punteroM2, GLM_SMOOTH | GLM_TEXTURE);
+}
+
+void graficarSorprendido()
+{
+    glRotatef(-1, 0, 0, 1);
+    glRotatef(54, 0, 1, 0);
+    glRotatef(-18, 1, 0, 0);
+    glScalef(0.3,0.35,0.3);
+    glBindTexture(GL_TEXTURE_2D, treeTextureAr[0].texID);
+    glmDraw(punteroM3, GLM_SMOOTH | GLM_TEXTURE);
 }
 
 void graficar()
@@ -115,8 +192,28 @@ void graficar()
     glLoadIdentity();
     gluLookAt(posicionCamara.X, posicionCamara.Y, posicionCamara.Z, 0, 0, 0, 0, 1, 0);
 
-    graficarFigura3D1();
-    graficarFigura3D2();
+    if(opcion==1)
+    {
+        opcion = 0;
+        idArchivoImagenActual = 0;
+        glutPostRedisplay();
+    }
+
+    glPushMatrix();
+    glTranslatef(-0.5f,-0.5f,1.6f);
+    graficarAsombrado();
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(0, -0.5f, 0.9f);
+    graficarEnojado();
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(1.2f, 0, 0.6f);
+    graficarSorprendido();
+    glPopMatrix();
+
     graficarImagen2D();
     graficarFlechaIzquierda2D();
     graficarFlechaDerecha2D();
@@ -136,6 +233,7 @@ void manejadorMouse(int button, int state, int x, int y)
             if(idArchivoImagenActual>0)
             {
                 idArchivoImagenActual--;
+                glutPostRedisplay();
             }
         }
         //Clic en la flecha derecha
@@ -144,6 +242,7 @@ void manejadorMouse(int button, int state, int x, int y)
             if(idArchivoImagenActual<nroArchivoImagenes-1)
             {
                 idArchivoImagenActual++;
+                glutPostRedisplay();
             }
         }
     }
@@ -151,15 +250,15 @@ void manejadorMouse(int button, int state, int x, int y)
 
 void manejarTeclado(unsigned char key, int x, int y)
 {
-    switch (key)
+    switch(key)
     {
     case 'c':
-
+    {
         break;
+    }
     }
     glutPostRedisplay();
 }
-
 int main(int argc, char **argv)
 {
     glutInit(&argc, argv);
@@ -169,7 +268,7 @@ int main(int argc, char **argv)
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     glutInitWindowSize(SCREEN_WIDTH, SCREEN_HEIGHT);
     glutInitWindowPosition(100, 10);
-    glutCreateWindow("Proyecto Autismo");
+    idWindow = glutCreateWindow("Proyecto Autismo");
 
     inicializar();
 
@@ -180,10 +279,15 @@ int main(int argc, char **argv)
         return 1;
     }
 
+    punteroM1 = glmReadOBJ("modelos/asombrado.obj");
+    punteroM2 = glmReadOBJ("modelos/enojado.obj");
+    punteroM3 = glmReadOBJ("modelos/sorprendido.obj");
+
+    crearMenu();
     glutDisplayFunc(graficar);
     glutReshapeFunc(redimensionar);
-    glutKeyboardFunc(manejarTeclado);
     glutMouseFunc(manejadorMouse);
+    //glutKeyboardFunc(manejarTeclado);
     glutMainLoop();
 
     return 0;
