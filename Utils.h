@@ -29,4 +29,15 @@ struct Position
     float Z;
 };
 
+struct InfoDatoUsuario {
+    char nombres[60];
+    char apellidos[60];
+    int edad;
+};
+
+struct InfoResultado {
+    int aciertos;
+    int desaciertos;
+};
+
 #endif // UTILS_H_INCLUDED
