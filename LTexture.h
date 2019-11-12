@@ -124,7 +124,7 @@ public:
         glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
 
         //Unbind texture
-        glBindTexture( GL_TEXTURE_2D, 0 );
+        glBindTexture( GL_TEXTURE_2D, NULL );
 
         //Check for error
         GLenum error = glGetError();

@@ -2,12 +2,10 @@
 #include <cstdlib>
 #include <cstring>
 #include "LoadImage.h" //DeviL library
-#include "Utils.h" //User Custom Library 1
-//#include "stdafx.h"
+#include "stdafx.h"
 #include "glm.h"
 #include "Texture.h"
-#include <GL/glui.h>
-#include "tinyfiledialogs.h"
+#include "GluiConfig.h"
 
 const int SCREEN_WIDTH = 950;
 const int SCREEN_HEIGHT = 650;
@@ -19,20 +17,6 @@ int idWindow, idMenu, idSubMenu, opcionMenu = 0;
 Position posicionCamara = {3,1.5f, 2};
 Position posicionFlechaIzquierda[3] = { { -3.5f, 3, 0 }, { posicionFlechaIzquierda[0].X+0.5f, posicionFlechaIzquierda[0].Y+0.5f, 0 }, { posicionFlechaIzquierda[0].X+0.5f, posicionFlechaIzquierda[0].Y-0.5f, 0 } };
 Position posicionFlechaDerecha[3] = { { -posicionFlechaIzquierda[0].X, posicionFlechaIzquierda[0].Y, posicionFlechaIzquierda[0].Z }, { -posicionFlechaIzquierda[1].X, posicionFlechaIzquierda[1].Y, posicionFlechaIzquierda[1].Z },  { -posicionFlechaIzquierda[2].X, posicionFlechaIzquierda[2].Y, posicionFlechaIzquierda[2].Z } };
-
-int idArchivoImagenActual = 0;
-
-const int ID_BTN_ENVIAR_DATOS = 1;
-const int ID_BTN_LIMPIAR_DATOS = 2;
-GLUI_Panel *panelInputsIngresoDatos;
-GLUI_Panel *panelButtonsIngresoDatos;
-GLUI_EditText *txtNombres;
-GLUI_EditText *txtApellidos;
-GLUI_Spinner* spnEdad;
-GLUI_Button *btnEnviarDatos;
-GLUI_Button *btnLimpiarDatos;
-
-InfoDatoUsuario infoDatoUsuario;
 
 GLMmodel* punteroM1 = NULL; //Asombrado
 GLMmodel* punteroM2 = NULL; //Enojado
@@ -95,27 +79,6 @@ void crearMenu(void)
     glutAddMenuEntry("Reiniciar", 1);
     glutAddMenuEntry("Salir", 0);
     glutAttachMenu(GLUT_RIGHT_BUTTON);
-}
-
-void manejadorButtons(int idButton)
-{
-    switch(idButton)
-    {
-    case ID_BTN_ENVIAR_DATOS:
-        if(strlen(txtNombres->get_text())>0 && strlen(txtApellidos->get_text())>0)
-        {
-            printf("Nombres: %s\n", infoDatoUsuario.nombres);
-            printf("Apellidos: %s\n", infoDatoUsuario.apellidos);
-            printf("Edad: %i\n\n", infoDatoUsuario.edad);
-        }
-        //tinyfd_messageBox("mensaje", "Hola Mundo", "ok", "info", 1);
-        break;
-    case ID_BTN_LIMPIAR_DATOS:
-        txtNombres->set_text((char*)"");
-        txtApellidos->set_text((char*)"");
-        spnEdad->set_int_val(6);
-        break;
-    }
 }
 
 void inicializar(void)
@@ -233,6 +196,54 @@ void graficarSorprendido()
     glmDraw(punteroM3, GLM_SMOOTH | GLM_TEXTURE);
 }
 
+void renderBitmap2D(float x, float y, void *fuente, char *cadena)
+{
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+    glOrtho(0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, 1, -1 );
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glLoadIdentity();
+    //Inicio de dibujo de figura 2D
+    char *c;
+    glRasterPos3f(x, y, 0);
+    for(c=cadena; *c !='\0'; c++)
+    {
+        glutBitmapCharacter(fuente, *c);
+    }
+    //Fin de dibujo de figura 2D
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+    glMatrixMode(GL_MODELVIEW);
+    glPopMatrix();
+}
+
+void graficarTextos()
+{
+    char numero[10], resultado[200] = "";
+    strcat(resultado, "Nombres: ");
+    strcat(resultado, infoDatoUsuario.nombres);
+    renderBitmap2D(10,50,GLUT_BITMAP_HELVETICA_10, resultado);
+    strcpy(resultado, "");
+    strcat(resultado, "Apellidos: ");
+    strcat(resultado, infoDatoUsuario.apellidos);
+    renderBitmap2D(10,75,GLUT_BITMAP_HELVETICA_12, resultado);
+    strcpy(resultado, "");
+    strcat(resultado, "Edad: ");
+    strcat(resultado, itoa(infoDatoUsuario.edad, numero, 10));
+    strcat(resultado, " anios");
+    renderBitmap2D(10,102,GLUT_BITMAP_HELVETICA_12, resultado);
+    strcpy(resultado, "");
+    strcat(resultado, "Aciertos: ");
+    strcat(resultado, itoa(infoDatoUsuario.infoResulto.aciertos, numero, 10));
+    renderBitmap2D(10,128,GLUT_BITMAP_HELVETICA_12,resultado);
+    strcpy(resultado, "");
+    strcat(resultado, "Desaciertos: ");
+    strcat(resultado, itoa(infoDatoUsuario.infoResulto.desaciertos, numero, 10));
+    renderBitmap2D(10,154,GLUT_BITMAP_HELVETICA_12,  resultado);
+}
+
 void graficar()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -243,30 +254,29 @@ void graficar()
     if(opcionMenu==1)
     {
         opcionMenu = 0;
-        idArchivoImagenActual = 0;
+        reiniciarEvent();
         glutPostRedisplay();
     }
 
-    /*
-    glPushMatrix();
-    glTranslatef(-0.5f,-0.5f,1.6f);
-    graficarAsombrado();
-    glPopMatrix();
+    if(empezar && !idArchivoImagenActual<nroArchivoImagenes-1)
+    {
+        mostrarResultadosEvent();
+    }
 
-    glPushMatrix();
-    glTranslatef(0, -0.5f, 0.9f);
-    graficarEnojado();
-    glPopMatrix();
-    */
+    if(empezar)
+    {
+        //3D
+        glPushMatrix();
+        glTranslatef(1.2f, 0, 0.6f);
+        graficarSorprendido();
+        glPopMatrix();
 
-    glPushMatrix();
-    glTranslatef(1.2f, 0, 0.6f);
-    graficarSorprendido();
-    glPopMatrix();
-
-    graficarImagen2D();
-    graficarFlechaIzquierda2D();
-    graficarFlechaDerecha2D();
+        //2D
+        graficarImagen2D();
+        graficarFlechaIzquierda2D();
+        graficarFlechaDerecha2D();
+        graficarTextos();
+    }
 
     glutSwapBuffers();
 }
@@ -302,28 +312,34 @@ void manejarTeclado(unsigned char key, int x, int y)
 {
     switch(key)
     {
-    case 'c':
-    {
+    case 'a':
+        if(empezar && idArchivoImagenActual<nroArchivoImagenes-1)
+        {
+            infoDatoUsuario.infoResulto.aciertos++;
+            idArchivoImagenActual++;
+        }
         break;
-    }
+    case 'd':
+        if(empezar && idArchivoImagenActual<nroArchivoImagenes-1)
+        {
+            infoDatoUsuario.infoResulto.desaciertos++;
+            idArchivoImagenActual++;
+        }
+        break;
     }
     glutPostRedisplay();
 }
 
-
-
 int main(int argc, char **argv)
 {
     glutInit(&argc, argv);
-
 
     glutInitContextVersion( 2, 1 );
 
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     glutInitWindowSize(SCREEN_WIDTH, SCREEN_HEIGHT);
     glutInitWindowPosition(XSCREENPOSITION, YSCREENPOSITION-20);
-
-    idWindow = glutCreateWindow("Proyecto Autismo");
+    idWindow = glutCreateWindow("COGRAVI - Proyecto Autismo");
 
     inicializar();
 
@@ -343,26 +359,11 @@ int main(int argc, char **argv)
     GLUI_Master.set_glutDisplayFunc(graficar);//glutDisplayFunc(graficar);
     GLUI_Master.set_glutReshapeFunc(redimensionar);
     GLUI_Master.set_glutMouseFunc(manejadorMouse);
-    //GLUI_Master.set_glutKeyboardFunc(manejarTeclado);
+    GLUI_Master.set_glutKeyboardFunc(manejarTeclado);
 
     GLUI *gluiForm = GLUI_Master.create_glui_subwindow( idWindow, GLUI_SUBWINDOW_BOTTOM);
 
-    //-->Controles GLUI
-    panelInputsIngresoDatos = new GLUI_Panel(gluiForm, "Ingreso de datos");
-
-    txtNombres = new GLUI_EditText(panelInputsIngresoDatos, "Nombres:", infoDatoUsuario.nombres);
-    txtNombres->set_w(250);
-    txtApellidos = new GLUI_EditText(panelInputsIngresoDatos, "Apellidos", infoDatoUsuario.apellidos);
-    txtApellidos->set_w(250);
-    spnEdad = new GLUI_Spinner(panelInputsIngresoDatos, "Edad:", &infoDatoUsuario.edad);
-    spnEdad->set_int_limits(6,17);
-
-    gluiForm->add_column_to_panel(panelInputsIngresoDatos, false);
-    panelButtonsIngresoDatos = new GLUI_Panel(panelInputsIngresoDatos, "", false);
-    btnEnviarDatos = new GLUI_Button(panelButtonsIngresoDatos, "Enviar", ID_BTN_ENVIAR_DATOS, manejadorButtons);
-    btnLimpiarDatos = new GLUI_Button(panelButtonsIngresoDatos, "Limpiar", ID_BTN_LIMPIAR_DATOS, manejadorButtons);
-
-    //Salir BTN_SALIR, (GLUI_Update_CB)exit
+    gluiControls(gluiForm);//Controles GLUI
 
     gluiForm->set_main_gfx_window(idWindow);
     GLUI_Master.set_glutIdleFunc(myGlutIdle);
