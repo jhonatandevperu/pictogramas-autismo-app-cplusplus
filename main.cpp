@@ -1,3 +1,4 @@
+#include<iostream>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -196,7 +197,7 @@ void graficarSorprendido()
     glmDraw(punteroM3, GLM_SMOOTH | GLM_TEXTURE);
 }
 
-void renderBitmap2D(float x, float y, void *fuente, char *cadena)
+void graficarTexto2D(float x, float y, void *fuente, char *cadena)
 {
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
@@ -219,29 +220,33 @@ void renderBitmap2D(float x, float y, void *fuente, char *cadena)
     glPopMatrix();
 }
 
-void graficarTextos()
+void graficarInfoUsuario()
 {
     char numero[10], resultado[200] = "";
     strcat(resultado, "Nombres: ");
-    strcat(resultado, infoDatoUsuario.nombres);
-    renderBitmap2D(10,50,GLUT_BITMAP_HELVETICA_10, resultado);
+    strcat(resultado, datosUsuario.nombres);
+    graficarTexto2D(10,50,GLUT_BITMAP_HELVETICA_12, resultado);
     strcpy(resultado, "");
     strcat(resultado, "Apellidos: ");
-    strcat(resultado, infoDatoUsuario.apellidos);
-    renderBitmap2D(10,75,GLUT_BITMAP_HELVETICA_12, resultado);
+    strcat(resultado, datosUsuario.apellidos);
+    graficarTexto2D(10,75,GLUT_BITMAP_HELVETICA_12, resultado);
     strcpy(resultado, "");
     strcat(resultado, "Edad: ");
-    strcat(resultado, itoa(infoDatoUsuario.edad, numero, 10));
+    strcat(resultado, itoa(datosUsuario.edad, numero, 10));
     strcat(resultado, " anios");
-    renderBitmap2D(10,102,GLUT_BITMAP_HELVETICA_12, resultado);
+    graficarTexto2D(10,102,GLUT_BITMAP_HELVETICA_12, resultado);
     strcpy(resultado, "");
     strcat(resultado, "Aciertos: ");
-    strcat(resultado, itoa(infoDatoUsuario.infoResulto.aciertos, numero, 10));
-    renderBitmap2D(10,128,GLUT_BITMAP_HELVETICA_12,resultado);
+    strcat(resultado, itoa(datosUsuario.aciertos, numero, 10));
+    graficarTexto2D(10,128,GLUT_BITMAP_HELVETICA_12,resultado);
     strcpy(resultado, "");
     strcat(resultado, "Desaciertos: ");
-    strcat(resultado, itoa(infoDatoUsuario.infoResulto.desaciertos, numero, 10));
-    renderBitmap2D(10,154,GLUT_BITMAP_HELVETICA_12,  resultado);
+    strcat(resultado, itoa(datosUsuario.desaciertos, numero, 10));
+    graficarTexto2D(10,154,GLUT_BITMAP_HELVETICA_12,  resultado);
+    strcpy(resultado, "");
+    strcat(resultado, "Id imagen: ");
+    strcat(resultado, itoa(idArchivoImagenActual+1, numero, 10));
+    graficarTexto2D(10,180,GLUT_BITMAP_HELVETICA_12,  resultado);
 }
 
 void graficar()
@@ -258,7 +263,7 @@ void graficar()
         glutPostRedisplay();
     }
 
-    if(empezar && !idArchivoImagenActual<nroArchivoImagenes-1)
+    if(empezar && datosUsuario.resultados.size()==nroArchivoImagenes)
     {
         mostrarResultadosEvent();
     }
@@ -275,9 +280,21 @@ void graficar()
         graficarImagen2D();
         graficarFlechaIzquierda2D();
         graficarFlechaDerecha2D();
-        graficarTextos();
-    }
+        graficarInfoUsuario();
 
+        if(!datosUsuario.resultadoRegistrado(idArchivoImagenActual))
+        {
+            graficarTexto2D(4,(SCREEN_HEIGHT/2)+310,GLUT_BITMAP_8_BY_13,(char*)"tecla c <Contento>, tecla e <Enojado>, tecla s <Sorprendido>, tecla a <Asustado>, tecla t <Triste>, tecla h <Hastiado>");
+        }
+        else
+        {
+            graficarTexto2D(4,(SCREEN_HEIGHT/2)+310,GLUT_BITMAP_8_BY_13,(char*)"Respuesta registrada correctamente.");
+        }
+    }
+    else
+    {
+        graficarTexto2D((SCREEN_WIDTH/2)-215,(SCREEN_HEIGHT/2),GLUT_BITMAP_TIMES_ROMAN_24,(char*)"Presiona la opcion 'Iniciar' para comenzar.");
+    }
     glutSwapBuffers();
 }
 
@@ -312,19 +329,53 @@ void manejarTeclado(unsigned char key, int x, int y)
 {
     switch(key)
     {
-    case 'a':
-        if(empezar && idArchivoImagenActual<nroArchivoImagenes-1)
+    case 'c' :
+    case 'e' :
+    case 's' :
+    case 'a' :
+    case 't' :
+    case 'h' :
+        if(empezar && idArchivoImagenActual>=0 && idArchivoImagenActual<nroArchivoImagenes)
         {
-            infoDatoUsuario.infoResulto.aciertos++;
-            idArchivoImagenActual++;
+            if(!datosUsuario.resultadoRegistrado(idArchivoImagenActual))
+            {
+                InfoResultado resultado;
+                resultado.idImagen = idArchivoImagenActual;
+                resultado.nombreEmocion = archivosImagenes[idArchivoImagenActual].nombreEmocion;
+                switch(key)
+                {
+                case 'c':
+                    resultado.acertado = archivosImagenes[idArchivoImagenActual].nombreEmocion.compare("Contento")==0;
+                    break;
+                case 'e':
+                    resultado.acertado = archivosImagenes[idArchivoImagenActual].nombreEmocion.compare("Enojado")==0;
+                    break;
+                case 's':
+                    resultado.acertado = archivosImagenes[idArchivoImagenActual].nombreEmocion.compare("Sorprendido")==0;
+                    break;
+                case 'a':
+                    resultado.acertado = archivosImagenes[idArchivoImagenActual].nombreEmocion.compare("Asustado")==0;
+                    break;
+                case 't':
+                    resultado.acertado = archivosImagenes[idArchivoImagenActual].nombreEmocion.compare("Triste")==0;
+                    break;
+                case 'h':
+                    resultado.acertado = archivosImagenes[idArchivoImagenActual].nombreEmocion.compare("Aburrido")==0;
+                    break;
+                }
+                if(resultado.acertado)
+                {
+                    datosUsuario.aciertos++;
+                }
+                else
+                {
+                    datosUsuario.desaciertos++;
+                }
+                datosUsuario.resultados.push_back(resultado);
+            }
         }
         break;
-    case 'd':
-        if(empezar && idArchivoImagenActual<nroArchivoImagenes-1)
-        {
-            infoDatoUsuario.infoResulto.desaciertos++;
-            idArchivoImagenActual++;
-        }
+    default :
         break;
     }
     glutPostRedisplay();

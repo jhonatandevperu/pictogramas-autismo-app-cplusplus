@@ -2,6 +2,7 @@
 #define UTILS_H_INCLUDED
 
 #include <cmath>
+#include <vector>
 
 struct FloatColorRGB //Need #include "cmath" library
 {
@@ -31,8 +32,9 @@ struct Position
 
 struct InfoResultado
 {
-    int aciertos;
-    int desaciertos;
+    int idImagen;
+    std::string nombreEmocion;
+    bool acertado;
 };
 
 struct InfoDatoUsuario
@@ -40,7 +42,20 @@ struct InfoDatoUsuario
     char nombres[60];
     char apellidos[60];
     int edad;
-    InfoResultado infoResulto;
+    std::vector<InfoResultado> resultados;
+    int aciertos;
+    int desaciertos;
+    bool resultadoRegistrado(int &idImagen)
+    {
+        for(unsigned int i=0; i<resultados.size(); i++)
+        {
+            if(resultados[i].idImagen==idImagen)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 };
 
 #endif // UTILS_H_INCLUDED
