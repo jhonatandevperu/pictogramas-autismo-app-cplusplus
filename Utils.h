@@ -30,6 +30,13 @@ struct Position
     float Z;
 };
 
+struct Scale
+{
+    float X;
+    float Y;
+    float Z;
+};
+
 struct InfoResultado
 {
     int idImagen;
