@@ -8,6 +8,16 @@
 #include "Texture.h"
 #include "GluiConfig.h"
 
+//Para la iluminación
+const GLfloat light_ambient[] = {0.6f, 0.6f, 0.6f, 1.0f};
+const GLfloat light_diffuse[] = {1.0f, 1.0f, 1.0f, 1.0f};
+const GLfloat light_specular[] = {1.0f, 1.0f, 1.0f, 1.0f};
+const GLfloat light_position[] = {2.0f, 5.0f, 5.0f, 0.0f};
+const GLfloat mat_ambient[] = {0.7f, 0.7f, 0.7f, 1.0f};
+const GLfloat mat_diffuse[] = {0.8f, 0.8f, 0.8f, 1.0f};
+const GLfloat mat_specular[] = {1.0f, 1.0f, 1.0f, 1.0f};
+const GLfloat high_shininess[] = {100.0f};
+
 const int SCREEN_WIDTH = 950;
 const int SCREEN_HEIGHT = 650;
 const int XSCREENPOSITION = (GetSystemMetrics(SM_CXSCREEN)-SCREEN_WIDTH)/2;
@@ -18,14 +28,19 @@ int idWindow, idMenu, idSubMenu, opcionMenu = 0;
 Position posicionCamara = {3,1.5f, 2};
 Position posicionFlechaIzquierda[3] = { { -3.5f, 3, 0 }, { posicionFlechaIzquierda[0].X+0.5f, posicionFlechaIzquierda[0].Y+0.5f, 0 }, { posicionFlechaIzquierda[0].X+0.5f, posicionFlechaIzquierda[0].Y-0.5f, 0 } };
 Position posicionFlechaDerecha[3] = { { -posicionFlechaIzquierda[0].X, posicionFlechaIzquierda[0].Y, posicionFlechaIzquierda[0].Z }, { -posicionFlechaIzquierda[1].X, posicionFlechaIzquierda[1].Y, posicionFlechaIzquierda[1].Z },  { -posicionFlechaIzquierda[2].X, posicionFlechaIzquierda[2].Y, posicionFlechaIzquierda[2].Z } };
-Position posicionModeloContento = { -1.55f, -1.0f, 1.55f };
-Position posicionModeloEnojado = { posicionModeloContento.X+0.55f, posicionModeloContento.Y+0.11f, posicionModeloContento.Z-0.55f };
-Position posicionModeloSorprendido = { posicionModeloEnojado.X+0.55f, posicionModeloEnojado.Y+0.11f, posicionModeloEnojado.Z-0.55f };
-Position posicionModeloAsustado = { posicionModeloSorprendido.X+0.55f, posicionModeloSorprendido.Y+0.11f, posicionModeloSorprendido.Z-0.55f };
-Position posicionModeloTriste = { posicionModeloAsustado.X+0.55f, posicionModeloAsustado.Y+0.11f, posicionModeloAsustado.Z-0.55f };
-Position posicionModeloAburrido = { posicionModeloTriste.X+0.55f, posicionModeloTriste.Y+0.11f, posicionModeloTriste.Z-0.55f };
+Position posicionModeloContento = { -1.69f, -1.7f, 1.69f };
+Position posicionModeloEnojado = { posicionModeloContento.X+0.71f, posicionModeloContento.Y+0.15f, posicionModeloContento.Z-0.71f };
+Position posicionModeloSorprendido = { posicionModeloEnojado.X+0.68f, posicionModeloEnojado.Y+0.18f, posicionModeloEnojado.Z-0.68f };
+Position posicionModeloAsustado = { posicionModeloSorprendido.X+0.58f, posicionModeloSorprendido.Y+0.23f, posicionModeloSorprendido.Z-0.58f };
+Position posicionModeloTriste = { posicionModeloAsustado.X+0.55f, posicionModeloAsustado.Y+0.09f, posicionModeloAsustado.Z-0.55f };
+Position posicionModeloAburrido = { posicionModeloTriste.X+0.52f, posicionModeloTriste.Y+0.03f, posicionModeloTriste.Z-0.52f };
 
-Scale escalaObjetos = { 0.25f, 0.3f, 0.25f };
+Scale escalaModeloContento = { 0.38f, 0.51f, 0.38f };
+Scale escalaModeloEnojado = { 0.4f, 0.46f, 0.4f };
+Scale escalaModeloSorprendido = { 0.4f, 0.46f, 0.4f };
+Scale escalaModeloAsustado = { 0.34f, 0.39f, 0.34f };
+Scale escalaModeloTriste = { 0.32f, 0.4f, 0.32f };
+Scale escalaModeloAburrido = { 0.29f, 0.392f, 0.29f };
 
 GLMmodel *modeloContento = NULL, *modeloEnojado = NULL, *modeloSorprendido = NULL, *modeloAsustado = NULL, *modeloTriste = NULL, *modeloAburrido = NULL;
 
@@ -224,13 +239,13 @@ void graficarInfoUsuario()
     strcat(resultado, itoa(idArchivoImagenActual+1, numero, 10));
     graficarTexto2D(10,180,GLUT_BITMAP_HELVETICA_12,  resultado);
 }
-//&& LoadTGA(&treeTextureAr[2], (char*)"modelos/contento.tga") && LoadTGA(&treeTextureAr[3], (char*)"modelos/enfadado.tga") && LoadTGA(&treeTextureAr[4], (char*)"modelos/sorprendido.tga") && LoadTGA(&treeTextureAr[5], (char*)"modelos/triste.tga"))
+
 void graficarContento()
 {
     glPushMatrix();
     glTranslatef(posicionModeloContento.X, posicionModeloContento.Y, posicionModeloContento.Z);
-    glRotatef(65, 0, 1, 0);
-    glScalef(escalaObjetos.X, escalaObjetos.Y, escalaObjetos.Z);
+    glRotatef(75, 0, 1, 0);
+    glScalef(escalaModeloContento.X, escalaModeloContento.Y, escalaModeloContento.Z);
     glBindTexture(GL_TEXTURE_2D, treeTextureAr[2].texID);
     glmDraw(modeloContento, GLM_SMOOTH | GLM_TEXTURE);
     glPopMatrix();
@@ -240,8 +255,8 @@ void graficarEnojado()
 {
     glPushMatrix();
     glTranslatef(posicionModeloEnojado.X, posicionModeloEnojado.Y, posicionModeloEnojado.Z);
-    glRotatef(65, 0, 1, 0);
-    glScalef(escalaObjetos.X, escalaObjetos.Y, escalaObjetos.Z);
+    glRotatef(70, 0, 1, 0);
+    glScalef(escalaModeloEnojado.X, escalaModeloEnojado.Y, escalaModeloEnojado.Z);
     glBindTexture(GL_TEXTURE_2D, treeTextureAr[3].texID);
     glmDraw(modeloEnojado, GLM_SMOOTH | GLM_TEXTURE);
     glPopMatrix();
@@ -251,8 +266,8 @@ void graficarSorprendido()
 {
     glPushMatrix();
     glTranslatef(posicionModeloSorprendido.X, posicionModeloSorprendido.Y, posicionModeloSorprendido.Z);
-    glRotatef(60, 0, 1, 0);
-    glScalef(escalaObjetos.X, escalaObjetos.Y, escalaObjetos.Z);
+    glRotatef(63, 0, 1, 0);
+    glScalef(escalaModeloSorprendido.X, escalaModeloSorprendido.Y, escalaModeloSorprendido.Z);
     glBindTexture(GL_TEXTURE_2D, treeTextureAr[4].texID);
     glmDraw(modeloSorprendido, GLM_SMOOTH | GLM_TEXTURE);
     glPopMatrix();
@@ -262,8 +277,8 @@ void graficarAsustado()
 {
     glPushMatrix();
     glTranslatef(posicionModeloAsustado.X, posicionModeloAsustado.Y, posicionModeloAsustado.Z);
-    glRotatef(-10, 0, 1, 0);
-    glScalef(escalaObjetos.X, escalaObjetos.Y, escalaObjetos.Z);
+    glRotatef(-15, 0, 1, 0);
+    glScalef(escalaModeloAsustado.X, escalaModeloAsustado.Y, escalaModeloAsustado.Z);
     glBindTexture(GL_TEXTURE_2D, treeTextureAr[1].texID);
     glmDraw(modeloAsustado, GLM_SMOOTH | GLM_TEXTURE);
     glPopMatrix();
@@ -273,8 +288,8 @@ void graficarTriste()
 {
     glPushMatrix();
     glTranslatef(posicionModeloTriste.X, posicionModeloTriste.Y, posicionModeloTriste.Z);
-    glRotatef(45, 0, 1, 0);
-    glScalef(escalaObjetos.X, escalaObjetos.Y, escalaObjetos.Z);
+    glRotatef(40, 0, 1, 0);
+    glScalef(escalaModeloTriste.X, escalaModeloTriste.Y, escalaModeloTriste.Z);
     glBindTexture(GL_TEXTURE_2D, treeTextureAr[5].texID);
     glmDraw(modeloTriste, GLM_SMOOTH | GLM_TEXTURE);
     glPopMatrix();
@@ -284,8 +299,8 @@ void graficarAburrido()
 {
     glPushMatrix();
     glTranslatef(posicionModeloAburrido.X, posicionModeloAburrido.Y, posicionModeloAburrido.Z);
-    glRotatef(40, 0, 1, 0);
-    glScalef(escalaObjetos.X-0.02f, escalaObjetos.Y-0.01f, escalaObjetos.Z-0.02f);  //Default { 0.25f, 0.3f, 0.25f }
+    glRotatef(35, 0, 1, 0);
+    glScalef(escalaModeloAburrido.X, escalaModeloAburrido.Y, escalaModeloAburrido.Z);
     glBindTexture(GL_TEXTURE_2D, treeTextureAr[0].texID);
     glmDraw(modeloAburrido, GLM_SMOOTH | GLM_TEXTURE);
     glPopMatrix();
@@ -314,6 +329,7 @@ void graficar()
     {
         //Coordenadas de objetos 3D
         /*
+        printf("Contento: %f, %f, %f\n", posicionModeloContento.X, posicionModeloContento.Y, posicionModeloContento.Z);
         printf("Enojado: %f, %f, %f\n", posicionModeloEnojado.X, posicionModeloEnojado.Y, posicionModeloEnojado.Z);
         printf("Sorprendido: %f, %f, %f\n", posicionModeloSorprendido.X, posicionModeloSorprendido.Y, posicionModeloSorprendido.Z);
         printf("Asustado: %f, %f, %f\n", posicionModeloAsustado.X, posicionModeloAsustado.Y, posicionModeloAsustado.Z);
@@ -337,11 +353,11 @@ void graficar()
 
         if(!datosUsuario.resultadoRegistrado(idArchivoImagenActual))
         {
-            graficarTexto2D(4,(SCREEN_HEIGHT/2)+310,GLUT_BITMAP_8_BY_13,(char*)"tecla c <Contento>, tecla e <Enojado>, tecla s <Sorprendido>, tecla a <Asustado>, tecla t <Triste>, tecla h <Aburrido>");
+            graficarTexto2D(4,(SCREEN_HEIGHT/2)+275,GLUT_BITMAP_8_BY_13,(char*)"tecla c <Contento>, tecla e <Enojado>, tecla s <Sorprendido>, tecla a <Asustado>, tecla t <Triste>, tecla h <Aburrido>");
         }
         else
         {
-            graficarTexto2D(4,(SCREEN_HEIGHT/2)+310,GLUT_BITMAP_8_BY_13,(char*)"Respuesta registrada correctamente.");
+            graficarTexto2D(4,(SCREEN_HEIGHT/2)+275,GLUT_BITMAP_8_BY_13,(char*)"Respuesta registrada correctamente.");
         }
     }
     else
@@ -428,36 +444,6 @@ void manejarTeclado(unsigned char key, int x, int y)
             }
         }
         break;
-    case 'j' :
-        posicionModeloEnojado.Y+=0.01f;
-        break;
-    case 'k' :
-        posicionModeloSorprendido.Y+=0.01f;
-        break;
-    case 'l' :
-        posicionModeloAsustado.Y+=0.01f;
-        break;
-    case 'b' :
-        posicionModeloEnojado.Y-=0.01f;
-        break;
-    case 'n' :
-        posicionModeloSorprendido.Y-=0.01f;
-        break;
-    case 'm' :
-        posicionModeloAsustado.Y-=0.1f;
-        break;
-    case 'u' :
-        posicionModeloTriste.Y-=0.01f;
-        break;
-    case 'i' :
-        posicionModeloTriste.Y-=0.1f;
-        break;
-    case 'o' :
-        posicionModeloAburrido.Y-=0.01f;
-        break;
-    case 'p' :
-        posicionModeloAburrido.Y-=0.1f;
-        break;
     default :
         break;
     }
@@ -476,6 +462,21 @@ int main(int argc, char **argv)
     idWindow = glutCreateWindow("COGRAVI - Proyecto Autismo");
 
     inicializar();
+
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
+    glEnable(GL_LIGHT0);
+    glEnable(GL_NORMALIZE);
+    glEnable(GL_COLOR_MATERIAL);
+    glEnable(GL_LIGHTING);
+    glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
+    glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
+    glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+    glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+    glMaterialfv(GL_FRONT, GL_SHININESS, high_shininess);
 
     //Realizar la inicialización de configuraciones para la librería DevIL
     if(!initGL() || !initDevIL())
