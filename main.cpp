@@ -42,14 +42,56 @@ Scale escalaModeloAsustado = { 0.34f, 0.39f, 0.34f };
 Scale escalaModeloTriste = { 0.32f, 0.4f, 0.32f };
 Scale escalaModeloAburrido = { 0.29f, 0.392f, 0.29f };
 
-GLMmodel *modeloContento = NULL, *modeloEnojado = NULL, *modeloSorprendido = NULL, *modeloAsustado = NULL, *modeloTriste = NULL, *modeloAburrido = NULL;
+//Modelos Aburrido
+GLMmodel *modeloCabezaAburrido = NULL;
+GLMmodel *modeloBocaAburrido = NULL;
+
+//Modelos Asustado
+GLMmodel *modeloCabezaAsustado = NULL;
+GLMmodel *modeloCejaDerechaAsustado = NULL;
+GLMmodel *modeloCejaIzquierdaAsustado = NULL;
+GLMmodel *modeloBocaAsustado = NULL;
+GLMmodel *ModeloNarizAsustado = NULL;
+
+//Modelos Contento
+GLMmodel *modeloCabezaContento = NULL;
+GLMmodel *modeloCejaDerechaContento = NULL;
+GLMmodel *modeloCejaIzquierdaContento = NULL;
+GLMmodel *modeloBocaContento = NULL;
+GLMmodel *modeloNarizContento = NULL;
+GLMmodel *modeloOjoIzquierdoContento = NULL;
+GLMmodel *modeloOjoDerechoContento = NULL;
+
+//Modelos Enojado
+GLMmodel *modeloCabezaEnojado = NULL;
+GLMmodel *modeloBocaEnojado = NULL;
+GLMmodel *modeloNarizEnojado = NULL;
+GLMmodel *modeloOjoDerechoEnojado = NULL;
+GLMmodel *modeloOjoIzquierdoEnojado = NULL;
+
+//Modelos Sorprendido
+GLMmodel *modeloCabezaSorprendido = NULL;
+GLMmodel *modeloCejaDerechaSorprendido = NULL;
+GLMmodel *modeloCejaIzquierdaSorprendido = NULL;
+GLMmodel *modeloBocaSorprendido = NULL;
+GLMmodel *modeloNarizSorprendido = NULL;
+GLMmodel *modeloOjoIzquierdoSorprendido = NULL;
+GLMmodel *modeloOjoDerechoSorprendido = NULL;
+
+//Modelos Triste
+GLMmodel *modeloCabezaTriste = NULL;
+GLMmodel *modeloCejaDerechaTriste = NULL;
+GLMmodel *modeloCejaIzquierdaTriste = NULL;
+GLMmodel *modeloBocaTriste = NULL;
+GLMmodel *modeloNarizTriste = NULL;
+GLMmodel *modeloOjoIzquierdo = NULL;
 
 Texture	treeTextureAr[6];
 
 bool LoadTreeTextures()
 {
     int i;
-    if (LoadTGA(&treeTextureAr[0], (char*)"modelos/aburrido.tga") && LoadTGA(&treeTextureAr[1], (char*)"modelos/asustado.tga") && LoadTGA(&treeTextureAr[2], (char*)"modelos/contento.tga") && LoadTGA(&treeTextureAr[3], (char*)"modelos/enfadado.tga") && LoadTGA(&treeTextureAr[4], (char*)"modelos/sorprendido.tga") && LoadTGA(&treeTextureAr[5], (char*)"modelos/triste.tga"))
+    if (LoadTGA(&treeTextureAr[0], (char*)"modelos/ABURRIDO/aburrido.tga") && LoadTGA(&treeTextureAr[1], (char*)"modelos/ASUSTADO/asustado.tga") && LoadTGA(&treeTextureAr[2], (char*)"modelos/CONTENTO/contento.tga") && LoadTGA(&treeTextureAr[3], (char*)"modelos/ENFADADO/enfadado.tga") && LoadTGA(&treeTextureAr[4], (char*)"modelos/SORPRENDIDO/sorprendido.tga") && LoadTGA(&treeTextureAr[5], (char*)"modelos/TRISTE/triste.tga"))
     {
         for (i = 0; i<6; i++)
         {
@@ -247,7 +289,31 @@ void graficarContento()
     glRotatef(75, 0, 1, 0);
     glScalef(escalaModeloContento.X, escalaModeloContento.Y, escalaModeloContento.Z);
     glBindTexture(GL_TEXTURE_2D, treeTextureAr[2].texID);
-    glmDraw(modeloContento, GLM_SMOOTH | GLM_TEXTURE);
+    glmDraw(modeloCabezaContento, GLM_SMOOTH | GLM_TEXTURE);
+    glPushMatrix();
+    glBindTexture(GL_TEXTURE_2D, treeTextureAr[2].texID);
+    glmDraw(modeloCejaDerechaContento, GLM_SMOOTH | GLM_TEXTURE);
+    glPopMatrix();
+    glPushMatrix();
+    glBindTexture(GL_TEXTURE_2D, treeTextureAr[2].texID);
+    glmDraw(modeloCejaIzquierdaContento, GLM_SMOOTH | GLM_TEXTURE);
+    glPopMatrix();
+    glPushMatrix();
+    glBindTexture(GL_TEXTURE_2D, treeTextureAr[2].texID);
+    glmDraw(modeloBocaContento, GLM_SMOOTH | GLM_TEXTURE);
+    glPopMatrix();
+    glPushMatrix();
+    glBindTexture(GL_TEXTURE_2D, treeTextureAr[2].texID);
+    glmDraw(modeloNarizContento, GLM_SMOOTH | GLM_TEXTURE);
+    glPopMatrix();
+    glPushMatrix();
+    glBindTexture(GL_TEXTURE_2D, treeTextureAr[2].texID);
+    glmDraw(modeloOjoIzquierdoContento, GLM_SMOOTH | GLM_TEXTURE);
+    glPopMatrix();
+    glPushMatrix();
+    glBindTexture(GL_TEXTURE_2D, treeTextureAr[2].texID);
+    glmDraw(modeloOjoDerechoContento, GLM_SMOOTH | GLM_TEXTURE);
+    glPopMatrix();
     glPopMatrix();
 }
 
@@ -258,7 +324,23 @@ void graficarEnojado()
     glRotatef(70, 0, 1, 0);
     glScalef(escalaModeloEnojado.X, escalaModeloEnojado.Y, escalaModeloEnojado.Z);
     glBindTexture(GL_TEXTURE_2D, treeTextureAr[3].texID);
-    glmDraw(modeloEnojado, GLM_SMOOTH | GLM_TEXTURE);
+    glmDraw(modeloCabezaEnojado, GLM_SMOOTH | GLM_TEXTURE);
+    glPushMatrix();
+    glBindTexture(GL_TEXTURE_2D, treeTextureAr[3].texID);
+    glmDraw(modeloBocaEnojado, GLM_SMOOTH | GLM_TEXTURE);
+    glPopMatrix();
+    glPushMatrix();
+    glBindTexture(GL_TEXTURE_2D, treeTextureAr[3].texID);
+    glmDraw(modeloNarizEnojado, GLM_SMOOTH | GLM_TEXTURE);
+    glPopMatrix();
+    glPushMatrix();
+    glBindTexture(GL_TEXTURE_2D, treeTextureAr[3].texID);
+    glmDraw(modeloOjoDerechoEnojado, GLM_SMOOTH | GLM_TEXTURE);
+    glPopMatrix();
+    glPushMatrix();
+    glBindTexture(GL_TEXTURE_2D, treeTextureAr[3].texID);
+    glmDraw(modeloOjoIzquierdoEnojado, GLM_SMOOTH | GLM_TEXTURE);
+    glPopMatrix();
     glPopMatrix();
 }
 
@@ -269,7 +351,31 @@ void graficarSorprendido()
     glRotatef(63, 0, 1, 0);
     glScalef(escalaModeloSorprendido.X, escalaModeloSorprendido.Y, escalaModeloSorprendido.Z);
     glBindTexture(GL_TEXTURE_2D, treeTextureAr[4].texID);
-    glmDraw(modeloSorprendido, GLM_SMOOTH | GLM_TEXTURE);
+    glmDraw(modeloCabezaSorprendido, GLM_SMOOTH | GLM_TEXTURE);
+    glPushMatrix();
+    glBindTexture(GL_TEXTURE_2D, treeTextureAr[4].texID);
+    glmDraw(modeloCejaDerechaSorprendido, GLM_SMOOTH | GLM_TEXTURE);
+    glPopMatrix();
+    glPushMatrix();
+    glBindTexture(GL_TEXTURE_2D, treeTextureAr[4].texID);
+    glmDraw(modeloCejaIzquierdaSorprendido, GLM_SMOOTH | GLM_TEXTURE);
+    glPopMatrix();
+    glPushMatrix();
+    glBindTexture(GL_TEXTURE_2D, treeTextureAr[4].texID);
+    glmDraw(modeloBocaSorprendido, GLM_SMOOTH | GLM_TEXTURE);
+    glPopMatrix();
+    glPushMatrix();
+    glBindTexture(GL_TEXTURE_2D, treeTextureAr[4].texID);
+    glmDraw(modeloNarizSorprendido, GLM_SMOOTH | GLM_TEXTURE);
+    glPopMatrix();
+    glPushMatrix();
+    glBindTexture(GL_TEXTURE_2D, treeTextureAr[4].texID);
+    glmDraw(modeloOjoIzquierdoSorprendido, GLM_SMOOTH | GLM_TEXTURE);
+    glPopMatrix();
+    glPushMatrix();
+    glBindTexture(GL_TEXTURE_2D, treeTextureAr[4].texID);
+    glmDraw(modeloOjoDerechoSorprendido, GLM_SMOOTH | GLM_TEXTURE);
+    glPopMatrix();
     glPopMatrix();
 }
 
@@ -280,7 +386,23 @@ void graficarAsustado()
     glRotatef(-15, 0, 1, 0);
     glScalef(escalaModeloAsustado.X, escalaModeloAsustado.Y, escalaModeloAsustado.Z);
     glBindTexture(GL_TEXTURE_2D, treeTextureAr[1].texID);
-    glmDraw(modeloAsustado, GLM_SMOOTH | GLM_TEXTURE);
+    glmDraw(modeloCabezaAsustado, GLM_SMOOTH | GLM_TEXTURE);
+    glPushMatrix();
+    glBindTexture(GL_TEXTURE_2D, treeTextureAr[1].texID);
+    glmDraw(modeloCejaIzquierdaAsustado, GLM_SMOOTH | GLM_TEXTURE);
+    glPopMatrix();
+    glPushMatrix();
+    glBindTexture(GL_TEXTURE_2D, treeTextureAr[1].texID);
+    glmDraw(modeloCejaDerechaAsustado, GLM_SMOOTH | GLM_TEXTURE);
+    glPopMatrix();
+    glPushMatrix();
+    glBindTexture(GL_TEXTURE_2D, treeTextureAr[1].texID);
+    glmDraw(modeloBocaAsustado, GLM_SMOOTH | GLM_TEXTURE);
+    glPopMatrix();
+    glPushMatrix();
+    glBindTexture(GL_TEXTURE_2D, treeTextureAr[1].texID);
+    glmDraw(ModeloNarizAsustado, GLM_SMOOTH | GLM_TEXTURE);
+    glPopMatrix();
     glPopMatrix();
 }
 
@@ -291,7 +413,27 @@ void graficarTriste()
     glRotatef(40, 0, 1, 0);
     glScalef(escalaModeloTriste.X, escalaModeloTriste.Y, escalaModeloTriste.Z);
     glBindTexture(GL_TEXTURE_2D, treeTextureAr[5].texID);
-    glmDraw(modeloTriste, GLM_SMOOTH | GLM_TEXTURE);
+    glmDraw(modeloCabezaTriste, GLM_SMOOTH | GLM_TEXTURE);
+    glPushMatrix();
+    glBindTexture(GL_TEXTURE_2D, treeTextureAr[5].texID);
+    glmDraw(modeloCejaDerechaTriste, GLM_SMOOTH | GLM_TEXTURE);
+    glPopMatrix();
+    glPushMatrix();
+    glBindTexture(GL_TEXTURE_2D, treeTextureAr[5].texID);
+    glmDraw(modeloCejaIzquierdaTriste, GLM_SMOOTH | GLM_TEXTURE);
+    glPopMatrix();
+    glPushMatrix();
+    glBindTexture(GL_TEXTURE_2D, treeTextureAr[5].texID);
+    glmDraw(modeloBocaTriste, GLM_SMOOTH | GLM_TEXTURE);
+    glPopMatrix();
+    glPushMatrix();
+    glBindTexture(GL_TEXTURE_2D, treeTextureAr[5].texID);
+    glmDraw(modeloNarizTriste, GLM_SMOOTH | GLM_TEXTURE);
+    glPopMatrix();
+    glPushMatrix();
+    glBindTexture(GL_TEXTURE_2D, treeTextureAr[5].texID);
+    glmDraw(modeloOjoIzquierdo, GLM_SMOOTH | GLM_TEXTURE);
+    glPopMatrix();
     glPopMatrix();
 }
 
@@ -302,7 +444,11 @@ void graficarAburrido()
     glRotatef(35, 0, 1, 0);
     glScalef(escalaModeloAburrido.X, escalaModeloAburrido.Y, escalaModeloAburrido.Z);
     glBindTexture(GL_TEXTURE_2D, treeTextureAr[0].texID);
-    glmDraw(modeloAburrido, GLM_SMOOTH | GLM_TEXTURE);
+    glmDraw(modeloCabezaAburrido, GLM_SMOOTH | GLM_TEXTURE);
+    glPushMatrix();
+    glBindTexture(GL_TEXTURE_2D, treeTextureAr[0].texID);
+    glmDraw(modeloBocaAburrido, GLM_SMOOTH | GLM_TEXTURE);
+    glPopMatrix();
     glPopMatrix();
 }
 
@@ -485,12 +631,49 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    modeloContento = glmReadOBJ((char*)"modelos/contento.obj");
-    modeloEnojado = glmReadOBJ((char*)"modelos/enfadado.obj");
-    modeloSorprendido = glmReadOBJ((char*)"modelos/sorprendido.obj");
-    modeloAsustado = glmReadOBJ((char*)"modelos/asustado.obj");
-    modeloTriste = glmReadOBJ((char*)"modelos/triste.obj");
-    modeloAburrido = glmReadOBJ((char*)"modelos/aburrido.obj");
+    //Modelos Aburrido
+    modeloCabezaAburrido = glmReadOBJ("modelos/ABURRIDO/cabezabored2.obj");
+    modeloBocaAburrido = glmReadOBJ("modelos/ABURRIDO/bocabored.obj");
+
+    //Modelos Asustado
+    modeloCabezaAsustado = glmReadOBJ("modelos/ASUSTADO/cabezascared.obj");
+    modeloCejaIzquierdaAsustado = glmReadOBJ("modelos/ASUSTADO/cejaderechascared.obj");
+    modeloCejaDerechaAsustado = glmReadOBJ("modelos/ASUSTADO/cejaizquierdascared.obj");
+    modeloBocaAsustado = glmReadOBJ("modelos/ASUSTADO/bocascared.obj");
+    ModeloNarizAsustado = glmReadOBJ("modelos/ASUSTADO/narizscared.obj");
+
+    //Modelos Contento
+    modeloCabezaContento = glmReadOBJ("modelos/CONTENTO/cabezahappy.obj");
+    modeloCejaDerechaContento = glmReadOBJ("modelos/CONTENTO/cejaderechahappy.obj");
+    modeloCejaIzquierdaContento = glmReadOBJ("modelos/CONTENTO/cejaizquierdahappy.obj");
+    modeloBocaContento = glmReadOBJ("modelos/CONTENTO/bocahappy.obj");
+    modeloNarizContento = glmReadOBJ("modelos/CONTENTO/narizhappy.obj");
+    modeloOjoIzquierdoContento = glmReadOBJ("modelos/CONTENTO/ojoizquierdohappy.obj");
+    modeloOjoDerechoContento = glmReadOBJ("modelos/CONTENTO/ojoderechohappy.obj");
+
+    //Modelos Enojado
+    modeloCabezaEnojado = glmReadOBJ("modelos/ENFADADO/cabezaangry.obj");
+    modeloBocaEnojado = glmReadOBJ("modelos/ENFADADO/bocaangry.obj");
+    modeloNarizEnojado = glmReadOBJ("modelos/ENFADADO/narizangry.obj");
+    modeloOjoDerechoEnojado = glmReadOBJ("modelos/ENFADADO/ojoderechoangry.obj");
+    modeloOjoIzquierdoEnojado = glmReadOBJ("modelos/ENFADADO/ojoizquierdoangry.obj");
+
+    //Modelos Sorprendido
+    modeloCabezaSorprendido = glmReadOBJ("modelos/SORPRENDIDO/cabezasurprise.obj");
+    modeloCejaDerechaSorprendido = glmReadOBJ("modelos/SORPRENDIDO/cejaderechasurprise.obj");
+    modeloCejaIzquierdaSorprendido = glmReadOBJ("modelos/SORPRENDIDO/cejaizquierdasurprise.obj");
+    modeloBocaSorprendido = glmReadOBJ("modelos/SORPRENDIDO/bocasurprise.obj");
+    modeloNarizSorprendido = glmReadOBJ("modelos/SORPRENDIDO/narizsurprise.obj");
+    modeloOjoIzquierdoSorprendido = glmReadOBJ("modelos/SORPRENDIDO/ojoizquierdosurprise.obj");
+    modeloOjoDerechoSorprendido = glmReadOBJ("modelos/SORPRENDIDO/ojoderechosurprise.obj");
+
+    //Modelos Triste
+    modeloCabezaTriste = glmReadOBJ("modelos/TRISTE/cabezasad.obj");
+    modeloCejaDerechaTriste = glmReadOBJ("modelos/TRISTE/cejaderechasad.obj");
+    modeloCejaIzquierdaTriste = glmReadOBJ("modelos/TRISTE/cejaizquierdasad.obj");
+    modeloBocaTriste = glmReadOBJ("modelos/TRISTE/bocasad.obj");
+    modeloNarizTriste = glmReadOBJ("modelos/TRISTE/narizsad.obj");
+    modeloOjoIzquierdo = glmReadOBJ("modelos/TRISTE/ojoizquierdosad.obj");
 
     crearMenu();
 
