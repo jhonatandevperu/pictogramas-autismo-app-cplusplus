@@ -16,7 +16,7 @@ struct ArchivoImagen
 {
     std::string nombreArchivo;
     std::string nombreEmocion;
-} const archivosImagenes[] =
+} const archivosImagenesEmociones[] =
 {
     { "01.png", "Contento" },
     { "02.png", "Triste" },
@@ -48,9 +48,24 @@ struct ArchivoImagen
     { "28.png", "Triste" },
     { "29.png", "Asustado" },
     { "30.png", "Sorprendido"}
+}, archivosImagenesSituaciones[] =
+{
+    { "01.jpeg", "Contento" },
+    { "02.jpeg", "Triste" },
+    { "03.jpeg", "Asustado" },
+    { "04.jpeg", "Avergonzado" },
+    { "05.jpeg", "Contento" },
+    { "06.jpeg", "Enojado" },
+    { "07.jpeg", "Triste" },
+    { "08.jpeg", "Contento" },
+    { "09.jpeg", "Triste" },
+    { "10.jpeg", "Contento" },
+    { "11.jpeg", "Avergonzado" },
+    { "12.jpeg", "Enojado" }
 };
 
-const int nroArchivoImagenes = sizeof(archivosImagenes)/sizeof(ArchivoImagen);
+const int nroArchivoImagenesEmociones = sizeof(archivosImagenesEmociones)/sizeof(ArchivoImagen);
+const int nroArchivoImagenesSituaciones = sizeof(archivosImagenesSituaciones)/sizeof(ArchivoImagen);
 
 /*
 Pre Condition:

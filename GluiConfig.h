@@ -18,7 +18,11 @@ GLUI_TextBox *txtResultados;
 
 InfoDatoUsuario datosUsuario;
 
-int idArchivoImagenActual = 0;
+int idArchivoImagenActual = 0, nivel = 1, totalImagenesActual = nroArchivoImagenesEmociones, opcionMenu = 0;
+
+float rotT1 = 0, rotT2 = 0, rotT3 = 0;
+bool  xd1 = 0;
+
 bool empezar = false;
 
 void limpiarDatosEvent(void)
@@ -28,8 +32,26 @@ void limpiarDatosEvent(void)
     spnEdad->set_int_val(5);
 }
 
-void reiniciarEvent(void)
+void reiniciarEvent(int id_nivel = 1)
 {
+    opcionMenu = 0;
+    rotT1 = 0;
+    rotT2 = 0;
+    rotT3 = 0;
+    xd1 = 0;
+    nivel = id_nivel;
+    switch(nivel)
+    {
+    case 1:
+        totalImagenesActual = nroArchivoImagenesEmociones;
+        break;
+    case 2:
+        totalImagenesActual = nroArchivoImagenesSituaciones;
+        break;
+    default:
+        totalImagenesActual = 0;
+        break;
+    }
     idArchivoImagenActual = 0;
     empezar = false;
     datosUsuario.aciertos = 0;
