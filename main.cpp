@@ -38,6 +38,7 @@ Position posicionModeloAsustado = { posicionModeloSorprendido.X+0.58f, posicionM
 Position posicionModeloTriste = { posicionModeloAsustado.X+0.55f, posicionModeloAsustado.Y+0.09f, posicionModeloAsustado.Z-0.55f };
 Position posicionModeloAburrido = { posicionModeloTriste.X+0.52f, posicionModeloTriste.Y+0.03f, posicionModeloTriste.Z-0.52f };
 Position posicionModeloAvergonzado = { posicionModeloTriste.X+0.50f, posicionModeloTriste.Y+0.3f, posicionModeloTriste.Z-0.50f };
+Position posicionModeloMiedoso = { posicionModeloEnojado.X+0.68f, posicionModeloEnojado.Y+0.52f, posicionModeloEnojado.Z-0.68f };
 
 Scale escalaModeloContento = { 0.38f, 0.51f, 0.38f };
 Scale escalaModeloEnojado = { 0.4f, 0.46f, 0.4f };
@@ -46,6 +47,7 @@ Scale escalaModeloAsustado = { 0.34f, 0.39f, 0.34f };
 Scale escalaModeloTriste = { 0.32f, 0.4f, 0.32f };
 Scale escalaModeloAburrido = { 0.29f, 0.392f, 0.29f };
 Scale escalaModeloAvergonzado = { 0.265f, 0.36f, 0.265f };
+Scale escalaModeloMiedoso = { 0.34f, 0.41f, 0.34f };
 
 //Modelos Aburrido
 GLMmodel *modeloCabezaAburrido = NULL;
@@ -100,14 +102,22 @@ GLMmodel *modeloNarizAvergonzado = NULL;
 GLMmodel *modeloOjoIzquierdoAvergonzado = NULL;
 GLMmodel *modeloOjoDerechoAvergonzado = NULL;
 
-Texture	treeTextureAr[7];
+//Modelos Miedoso
+GLMmodel *modeloCabezaMiedoso = NULL;
+GLMmodel *modeloCejaDerechaMiedoso = NULL;
+GLMmodel *modeloCejaIzquierdaMiedoso = NULL;
+GLMmodel *modeloManoMiedoso = NULL;
+GLMmodel *modeloOjoIzquierdoMiedoso = NULL;
+GLMmodel *modeloOjoDerechoMiedoso = NULL;
+
+Texture	treeTextureAr[8];
 
 bool LoadTreeTextures()
 {
     int i;
-    if (LoadTGA(&treeTextureAr[0], (char*)"modelos/ABURRIDO/aburrido.tga") && LoadTGA(&treeTextureAr[1], (char*)"modelos/ASUSTADO/asustado.tga") && LoadTGA(&treeTextureAr[2], (char*)"modelos/CONTENTO/contento.tga") && LoadTGA(&treeTextureAr[3], (char*)"modelos/ENFADADO/enfadado.tga") && LoadTGA(&treeTextureAr[4], (char*)"modelos/SORPRENDIDO/sorprendido.tga") && LoadTGA(&treeTextureAr[5], (char*)"modelos/TRISTE/triste.tga") && LoadTGA(&treeTextureAr[6], (char*)"modelos/AVERGONZADO/avergonzado.tga"))
+    if (LoadTGA(&treeTextureAr[0], (char*)"modelos/ABURRIDO/aburrido.tga") && LoadTGA(&treeTextureAr[1], (char*)"modelos/ASUSTADO/asustado.tga") && LoadTGA(&treeTextureAr[2], (char*)"modelos/CONTENTO/contento.tga") && LoadTGA(&treeTextureAr[3], (char*)"modelos/ENFADADO/enfadado.tga") && LoadTGA(&treeTextureAr[4], (char*)"modelos/SORPRENDIDO/sorprendido.tga") && LoadTGA(&treeTextureAr[5], (char*)"modelos/TRISTE/triste.tga") && LoadTGA(&treeTextureAr[6], (char*)"modelos/AVERGONZADO/avergonzado.tga") && LoadTGA(&treeTextureAr[7], (char*)"modelos/MIEDOSO/miedoso.tga"))
     {
-        for (i = 0; i<7; i++)
+        for (i = 0; i<8; i++)
         {
             glGenTextures(1, &treeTextureAr[i].texID);
             glBindTexture(GL_TEXTURE_2D, treeTextureAr[i].texID);
@@ -657,6 +667,49 @@ void graficarAvergonzado()
     glPopMatrix();
 }
 
+void graficarMiedoso()
+{
+    glPushMatrix();
+    glTranslatef(posicionModeloMiedoso.X, posicionModeloMiedoso.Y, posicionModeloMiedoso.Z);
+    glRotatef(63, 0, 1, 0);
+    glScalef(escalaModeloMiedoso.X, escalaModeloMiedoso.Y, escalaModeloMiedoso.Z);
+    glBindTexture(GL_TEXTURE_2D, treeTextureAr[7].texID);
+    glmDraw(modeloCabezaMiedoso, GLM_SMOOTH | GLM_TEXTURE);
+
+    glPushMatrix();
+    glRotatef(rotT2,0,0,0);
+    glRotatef(0, 0, 0, 1);
+    glBindTexture(GL_TEXTURE_2D, treeTextureAr[7].texID);
+    glmDraw(modeloCejaIzquierdaMiedoso, GLM_SMOOTH | GLM_TEXTURE);
+    glPushMatrix();
+    glRotatef(0, 0, 0, 1);
+    glBindTexture(GL_TEXTURE_2D, treeTextureAr[7].texID);
+    glmDraw(modeloOjoIzquierdoMiedoso, GLM_SMOOTH | GLM_TEXTURE);
+    glPopMatrix();
+    glPopMatrix();
+
+    glPushMatrix();
+    glRotatef(rotT1,0,0,0);
+    glRotatef(0, 0, 0, 1);
+    glBindTexture(GL_TEXTURE_2D, treeTextureAr[7].texID);
+    glmDraw(modeloCejaDerechaMiedoso, GLM_SMOOTH | GLM_TEXTURE);
+    glPushMatrix();
+    glRotatef(0, 0, 0, 1);
+    glBindTexture(GL_TEXTURE_2D, treeTextureAr[7].texID);
+    glmDraw(modeloOjoDerechoMiedoso, GLM_SMOOTH | GLM_TEXTURE);
+    glPopMatrix();
+    glPopMatrix();
+
+    glPushMatrix();
+    glRotatef(rotT3,0,0,0);
+    glRotatef(0, 0, 0, 1);
+    glBindTexture(GL_TEXTURE_2D, treeTextureAr[7].texID);
+    glmDraw(modeloManoMiedoso, GLM_SMOOTH | GLM_TEXTURE);
+    glPopMatrix();
+
+    glPopMatrix();
+}
+
 void graficar()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -677,16 +730,6 @@ void graficar()
 
     if(empezar)
     {
-        //Coordenadas de objetos 3D
-
-        //printf("Contento: %f, %f, %f\n", posicionModeloContento.X, posicionModeloContento.Y, posicionModeloContento.Z);
-        //printf("Enojado: %f, %f, %f\n", posicionModeloEnojado.X, posicionModeloEnojado.Y, posicionModeloEnojado.Z);
-        //printf("Sorprendido: %f, %f, %f\n", posicionModeloSorprendido.X, posicionModeloSorprendido.Y, posicionModeloSorprendido.Z);
-        //printf("Asustado: %f, %f, %f\n", posicionModeloAsustado.X, posicionModeloAsustado.Y, posicionModeloAsustado.Z);
-        //printf("Triste: %f, %f, %f\n", posicionModeloTriste.X, posicionModeloTriste.Y, posicionModeloTriste.Z);
-        //printf("Aburrido: %f, %f, %f\n", posicionModeloAburrido.X, posicionModeloAburrido.Y, posicionModeloAburrido.Z);
-        //printf("Avergonzado: %f, %f, %f\n", posicionModeloAvergonzado.X, posicionModeloAvergonzado.Y, posicionModeloAvergonzado.Z);
-
         //Objetos 3D
         switch(nivel)
         {
@@ -701,7 +744,7 @@ void graficar()
         case 2:
             graficarContento();
             graficarEnojado();
-            graficarSorprendido();
+            graficarMiedoso();
             graficarAsustado();
             graficarTriste();
             graficarAvergonzado();
@@ -727,7 +770,8 @@ void graficar()
                 break;
             case 2:
                 graficarTexto2D((SCREEN_WIDTH/2)-85,(SCREEN_HEIGHT/2),GLUT_BITMAP_TIMES_ROMAN_24,(char*)"Como se siente?");
-                graficarTexto2D(50,(SCREEN_HEIGHT/2)+234,GLUT_BITMAP_8_BY_13,(char*)"<Contento>         <Enojado>         <Sorprendido>         <Asustado>         <Triste>         <Avergonzado>");
+                graficarTexto2D(50,(SCREEN_HEIGHT/2)+234,GLUT_BITMAP_8_BY_13,(char*)"<Contento>           <Enojado>                            <Asustado>          <Triste>         <Avergonzado>");
+                graficarTexto2D(363,(SCREEN_HEIGHT/2)+256,GLUT_BITMAP_8_BY_13,(char*)"<Miedoso>");
                 break;
             default:
                 printf("No se puede cargar los textos 2D porque no se reconoce el nivel seleccionado!");
@@ -768,6 +812,7 @@ void manejadorMouse(int button, int state, int x, int y)
         {
             if(idArchivoImagenActual>0)
             {
+                gLoadedTexture.freeTexture();
                 idArchivoImagenActual--;
                 glutPostRedisplay();
             }
@@ -778,6 +823,7 @@ void manejadorMouse(int button, int state, int x, int y)
         {
             if(idArchivoImagenActual<totalImagenesActual-1)
             {
+                gLoadedTexture.freeTexture();
                 idArchivoImagenActual++;
                 glutPostRedisplay();
             }
@@ -801,7 +847,15 @@ void manejadorMouse(int button, int state, int x, int y)
                 }
                 else if(XMouse>=-0.47f && XMouse<=-0.003f && YMouse<=0.12f && YMouse>=-0.57f)   //Sorprendido
                 {
-                    resultado.acertado = archivosImagenesEmociones[idArchivoImagenActual].nombreEmocion.compare("Sorprendido")==0;
+                    switch(nivel)
+                    {
+                    case 1:
+                        resultado.acertado = archivosImagenesEmociones[idArchivoImagenActual].nombreEmocion.compare("Sorprendido")==0;
+                        break;
+                    case 2:
+                        resultado.acertado = archivosImagenesEmociones[idArchivoImagenActual].nombreEmocion.compare("Miedoso")==0;
+                        break;
+                    }
                 }
                 else if(XMouse>=0.02f && XMouse<=0.49f && YMouse<=0.12f && YMouse>=-0.57f)   //Asustado
                 {
@@ -850,73 +904,13 @@ void manejarTeclado(unsigned char key, int x, int y)
     switch(key)
     {
     case '1':
+        gLoadedTexture.freeTexture();
         reiniciarEvent(1);
         break;
     case '2':
+        gLoadedTexture.freeTexture();
         reiniciarEvent(2);
         break;
-    /*
-    case 'c' :
-    case 'e' :
-    case 's' :
-    case 'a' :
-    case 't' :
-    case 'h' :
-    case 'm' :
-        if(empezar && idArchivoImagenActual>=0 && idArchivoImagenActual<totalImagenesActual)
-        {
-            if(!datosUsuario.resultadoRegistrado(idArchivoImagenActual))
-            {
-                InfoResultado resultado;
-                resultado.idImagen = idArchivoImagenActual;
-                resultado.nombreEmocion = archivosImagenesEmociones[idArchivoImagenActual].nombreEmocion;
-                switch(key)
-                {
-                case 'c':
-                    resultado.acertado = archivosImagenesEmociones[idArchivoImagenActual].nombreEmocion.compare("Contento")==0;
-                    break;
-                case 'e':
-                    resultado.acertado = archivosImagenesEmociones[idArchivoImagenActual].nombreEmocion.compare("Enojado")==0;
-                    break;
-                case 's':
-                    resultado.acertado = archivosImagenesEmociones[idArchivoImagenActual].nombreEmocion.compare("Sorprendido")==0;
-                    break;
-                case 'a':
-                    resultado.acertado = archivosImagenesEmociones[idArchivoImagenActual].nombreEmocion.compare("Asustado")==0;
-                    break;
-                case 't':
-                    resultado.acertado = archivosImagenesEmociones[idArchivoImagenActual].nombreEmocion.compare("Triste")==0;
-                    break;
-                case 'h':
-                    switch(nivel)
-                    {
-                    case 1:
-                        resultado.acertado = archivosImagenesEmociones[idArchivoImagenActual].nombreEmocion.compare("Aburrido")==0;
-                        break;
-                    case 2:
-                        resultado.acertado = archivosImagenesEmociones[idArchivoImagenActual].nombreEmocion.compare("Avergonzado")==0;
-                        break;
-                    }
-                    break;
-                case 'm':
-                    resultado.acertado = archivosImagenesEmociones[idArchivoImagenActual].nombreEmocion.compare("Miedoso")==0;
-                    break;
-                }
-                if(resultado.acertado)
-                {
-                    datosUsuario.aciertos++;
-                    SoundEngine->play2D((char*)"audio/acierto.wav", GL_FALSE);
-                }
-                else
-                {
-                    datosUsuario.desaciertos++;
-                    SoundEngine->play2D((char*)"audio/desacierto.wav", GL_FALSE);
-                }
-                datosUsuario.resultados.push_back(resultado);
-            }
-        }
-        break;
-        */
     default :
         break;
     }
@@ -1024,6 +1018,14 @@ int main(int argc, char **argv)
     modeloNarizAvergonzado = glmReadOBJ("modelos/AVERGONZADO/narizashamed.obj");
     modeloOjoIzquierdoAvergonzado = glmReadOBJ("modelos/AVERGONZADO/ojoizquierdoashamed.obj");
     modeloOjoDerechoAvergonzado = glmReadOBJ("modelos/AVERGONZADO/ojoderechoashamed.obj");
+
+    //Modelos Miedoso
+    modeloCabezaMiedoso = glmReadOBJ("modelos/MIEDOSO/cabezafearful.obj");
+    modeloCejaDerechaMiedoso = glmReadOBJ("modelos/MIEDOSO/cejaderechafearful.obj");
+    modeloCejaIzquierdaMiedoso = glmReadOBJ("modelos/MIEDOSO/cejaizquierdafearful.obj");
+    modeloManoMiedoso = glmReadOBJ("modelos/MIEDOSO/manofearful.obj");
+    modeloOjoIzquierdoMiedoso = glmReadOBJ("modelos/MIEDOSO/ojoizquierdofearful.obj");
+    modeloOjoDerechoMiedoso = glmReadOBJ("modelos/MIEDOSO/ojoderechofearful.obj");
 
     GLUI_Master.set_glutTimerFunc(500,rotarT1,1);
     GLUI_Master.set_glutTimerFunc(500,rotarT2,2);
